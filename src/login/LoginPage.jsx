@@ -342,7 +342,8 @@ const LoginPage = (props) => {
                   className="login-button"
                   state={submitState}
                   labels={{
-                    default: formatMessage(messages["sign.in.button"]),
+                    // default: formatMessage(messages["sign.in.button"]),
+                    default: "Войти",
                     pending: "",
                   }}
                   onClick={handleSubmit}
