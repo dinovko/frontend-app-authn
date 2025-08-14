@@ -1,45 +1,43 @@
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
 
-import { getConfig } from '@edx/frontend-platform';
-import { sendPageEvent, sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { getAuthService } from '@edx/frontend-platform/auth';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { getConfig } from "@edx/frontend-platform";
 import {
-  Icon,
-  Tab,
-  Tabs,
-} from '@openedx/paragon';
-import { ChevronLeft } from '@openedx/paragon/icons';
-import PropTypes from 'prop-types';
-import { Navigate, useNavigate } from 'react-router-dom';
+  sendPageEvent,
+  sendTrackEvent,
+} from "@edx/frontend-platform/analytics";
+import { getAuthService } from "@edx/frontend-platform/auth";
+import { useIntl } from "@edx/frontend-platform/i18n";
+import { Icon, Tab, Tabs } from "@openedx/paragon";
+import { ChevronLeft } from "@openedx/paragon/icons";
+import PropTypes from "prop-types";
+import { Navigate, useNavigate } from "react-router-dom";
 
-import BaseContainer from '../base-container';
-import { clearThirdPartyAuthContextErrorMessage } from '../common-components/data/actions';
+import BaseContainer from "../base-container";
+import { clearThirdPartyAuthContextErrorMessage } from "../common-components/data/actions";
+import { tpaProvidersSelector } from "../common-components/data/selectors";
+import messages from "../common-components/messages";
+import { LOGIN_PAGE, REGISTER_PAGE } from "../data/constants";
 import {
-  tpaProvidersSelector,
-} from '../common-components/data/selectors';
-import messages from '../common-components/messages';
-import { LOGIN_PAGE, REGISTER_PAGE } from '../data/constants';
-import {
-  getTpaHint, getTpaProvider, updatePathWithQueryParams,
-} from '../data/utils';
-import { LoginPage } from '../login';
-import { backupLoginForm } from '../login/data/actions';
-import { RegistrationPage } from '../register';
-import { backupRegistrationForm } from '../register/data/actions';
+  getTpaHint,
+  getTpaProvider,
+  updatePathWithQueryParams,
+} from "../data/utils";
+import { LoginPage } from "../login";
+import { backupLoginForm } from "../login/data/actions";
+import { RegistrationPage } from "../register";
+import { backupRegistrationForm } from "../register/data/actions";
 
 const Logistration = (props) => {
   const { selectedPage, tpaProviders } = props;
   const tpaHint = getTpaHint();
-  const {
-    providers, secondaryProviders,
-  } = tpaProviders;
+  const { providers, secondaryProviders } = tpaProviders;
   const { formatMessage } = useIntl();
   const [institutionLogin, setInstitutionLogin] = useState(false);
-  const [key, setKey] = useState('');
+  const [key, setKey] = useState("");
   const navigate = useNavigate();
-  const disablePublicAccountCreation = getConfig().ALLOW_PUBLIC_ACCOUNT_CREATION === false;
+  const disablePublicAccountCreation =
+    getConfig().ALLOW_PUBLIC_ACCOUNT_CREATION === false;
   const hideRegistrationLink = getConfig().SHOW_REGISTRATION_LINKS === false;
 
   useEffect(() => {
@@ -56,11 +54,16 @@ const Logistration = (props) => {
   }, [navigate, disablePublicAccountCreation]);
 
   const handleInstitutionLogin = (e) => {
-    sendTrackEvent('edx.bi.institution_login_form.toggled', { category: 'user-engagement' });
-    if (typeof e === 'string') {
-      sendPageEvent('login_and_registration', e === '/login' ? 'login' : 'register');
+    sendTrackEvent("edx.bi.institution_login_form.toggled", {
+      category: "user-engagement",
+    });
+    if (typeof e === "string") {
+      sendPageEvent(
+        "login_and_registration",
+        e === "/login" ? "login" : "register"
+      );
     } else {
-      sendPageEvent('login_and_registration', e.target.dataset.eventName);
+      sendPageEvent("login_and_registration", e.target.dataset.eventName);
     }
 
     setInstitutionLogin(!institutionLogin);
@@ -70,7 +73,9 @@ const Logistration = (props) => {
     if (tabKey === currentTab) {
       return;
     }
-    sendTrackEvent(`edx.bi.${tabKey.replace('/', '')}_form.toggled`, { category: 'user-engagement' });
+    sendTrackEvent(`edx.bi.${tabKey.replace("/", "")}_form.toggled`, {
+      category: "user-engagement",
+    });
     props.clearThirdPartyAuthContextErrorMessage();
     if (tabKey === LOGIN_PAGE) {
       props.backupRegistrationForm();
@@ -85,8 +90,8 @@ const Logistration = (props) => {
       <Icon src={ChevronLeft} className="left-icon" />
       <span className="ml-2">
         {selectedPage === LOGIN_PAGE
-          ? formatMessage(messages['logistration.sign.in'])
-          : formatMessage(messages['logistration.register'])}
+          ? formatMessage(messages["logistration.sign.in"])
+          : formatMessage(messages["logistration.register"])}
       </span>
     </div>
   );
@@ -99,7 +104,20 @@ const Logistration = (props) => {
   return (
     <BaseContainer>
       <div>
-        {disablePublicAccountCreation
+        <>
+          <div id="main-content" className="main-content">
+            {/* {!institutionLogin && (
+              <h3 className="mb-4.5">
+                {formatMessage(messages["logistration.sign.in"])}
+              </h3>
+            )} */}
+            <LoginPage
+              institutionLogin={institutionLogin}
+              handleInstitutionLogin={handleInstitutionLogin}
+            />
+          </div>
+        </>
+        {/* {disablePublicAccountCreation
           ? (
             <>
               {institutionLogin && (
@@ -148,7 +166,7 @@ const Logistration = (props) => {
                   )}
               </div>
             </div>
-          )}
+          )} */}
       </div>
     </BaseContainer>
   );
@@ -176,15 +194,12 @@ Logistration.defaultProps = {
   selectedPage: REGISTER_PAGE,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   tpaProviders: tpaProvidersSelector(state),
 });
 
-export default connect(
-  mapStateToProps,
-  {
-    backupLoginForm,
-    backupRegistrationForm,
-    clearThirdPartyAuthContextErrorMessage,
-  },
-)(Logistration);
+export default connect(mapStateToProps, {
+  backupLoginForm,
+  backupRegistrationForm,
+  clearThirdPartyAuthContextErrorMessage,
+})(Logistration);

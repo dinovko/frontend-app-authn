@@ -4,6 +4,7 @@ import {
   Form, TransitionReplace,
 } from '@openedx/paragon';
 import PropTypes from 'prop-types';
+import './FormGroup.scss';
 
 const FormGroup = (props) => {
   const [hasFocus, setHasFocus] = useState(false);
