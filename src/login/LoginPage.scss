@@ -1,201 +1,493 @@
+/* Основной контейнер страницы */
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  position: relative;
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #1d4ed8 100%);
+  overflow: hidden;
+}
+
+/* Фоновый паттерн с иллюстрациями */
 .full-bg {
   position: absolute;
   left: 0;
   top: 0;
   bottom: 0;
   right: 0;
-  z-index: -1;
-  background: url("../../public/assets/login_page_bg.png");
-
+  z-index: 1;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(147, 197, 253, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(147, 197, 253, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(147, 197, 253, 0.25) 0%, transparent 50%);
+  
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: 
+      url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.08'%3E%3Ccircle cx='60' cy='60' r='6'/%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3Ccircle cx='90' cy='90' r='3'/%3E%3Ccircle cx='20' cy='80' r='5'/%3E%3Ccircle cx='80' cy='20' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.4;
+    animation: float 20s ease-in-out infinite;
+  }
+  
   &::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: rgba(0, 102, 255, 0.8); // интенсивность регулируйте альфой
-    pointer-events: none; // чтобы клики проходили сквозь
-    background:
-      linear-gradient(180deg, rgba(0, 122, 255, 0.8) 71.62%, #007aff 100%);
+    background: 
+      radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 40%),
+      radial-gradient(circle at 90% 10%, rgba(59, 130, 246, 0.08) 0%, transparent 40%),
+      radial-gradient(circle at 50% 90%, rgba(59, 130, 246, 0.12) 0%, transparent 40%);
+    animation: pulse 15s ease-in-out infinite;
   }
 }
-.login-container {
-  width: 100%;
-  max-width: 402px;
-  border-radius: 24px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-  overflow: hidden;
-  background: white;
-  //   max-height: 415px;
-  //   height: 415px;
+
+/* Анимации для фона */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-10px) rotate(1deg); }
+  66% { transform: translateY(10px) rotate(-1deg); }
 }
 
-/* Security Header */
+@keyframes pulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+/* Основной контейнер формы */
+.login-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 450px;
+  background: white;
+  border-radius: 24px;
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transform: perspective(1000px) rotateX(0deg);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  &:hover {
+    transform: perspective(1000px) rotateX(2deg);
+    box-shadow: 
+      0 35px 70px -12px rgba(0, 0, 0, 0.3),
+      0 0 0 1px rgba(255, 255, 255, 0.15);
+  }
+}
+
+/* Заголовок безопасности */
 .security-header {
-  background: rgba(29, 56, 86, 1);
+  background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
   color: white;
-  padding: 16px 24px;
+  padding: 20px 24px;
   display: flex;
   align-items: center;
   gap: 12px;
   font-size: 14px;
   font-weight: 500;
-  height: 61px;
+  line-height: 1.4;
+  min-height: 65px;
+  position: relative;
+  
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  }
+  
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  }
 }
 
 .security-icon {
-  width: 20px;
-  height: 20px;
-  border: 2px solid white;
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(255, 255, 255, 0.8);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
-  font-weight: bold;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+  }
+  
+  img {
+    filter: brightness(0) invert(1);
+    opacity: 0.9;
+  }
 }
 
-/* CAPTCHA */
-.captcha-section {
-  padding: 16px 24px;
-  background: #f7f9fc;
-  text-align: center;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.captcha-code {
-  background: #4a90e2;
-  color: white;
-  padding: 6px 16px;
-  border-radius: 8px;
-  font-family: monospace;
-  font-size: 16px;
-  font-weight: bold;
-  letter-spacing: 2px;
-  display: inline-block;
-}
-
-/* Form Content */
+/* Основное содержимое формы */
 .form-content {
-  padding: 39px 27px;
+  padding: 40px 32px;
+  background: white;
+  position: relative;
+  
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
+  }
 }
 
+/* Заголовок формы */
 .form-header {
   display: flex;
-  align-items: start;
-  gap: 1px;
+  align-items: center;
+  gap: 12px;
   margin-bottom: 32px;
   flex-direction: column;
+  text-align: center;
 }
 
 .form-icon {
-  width: 20px;
-  height: 20px;
+  width: 32px;
+  height: 32px;
+  display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  margin-left: -5px;
-  margin-bottom: -5px;
+  margin-bottom: 8px;
+  transition: transform 0.2s ease;
+  
+  &:hover {
+    transform: scale(1.1) rotate(5deg);
+  }
+  
+  img {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  }
 }
 
 .form-title {
-  font-size: 24px;
-  font-weight: 600;
-  color: #1a202c;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
   margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-/* Form Fields */
-.form-group {
-  margin-bottom: 24px;
-}
-
-.form-label {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #2d3748;
-}
-
+/* Поля формы */
 .form-input-text {
-  font-family: Inter;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   font-weight: 600;
-  font-style: Semi Bold;
   font-size: 14px;
-  line-height: 100%;
-  letter-spacing: 0%;
-  margin: 8px 0;
+  line-height: 1.4;
+  color: #374151;
+  margin: 16px 0 8px 0;
+  display: block;
+  position: relative;
+  
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 20px;
+    height: 2px;
+    background: linear-gradient(90deg, #3b82f6, transparent);
+    border-radius: 1px;
+  }
 }
 
 .form-input {
-  //   width: 100%;
-  // padding: 16px 20px;
-  //   border: 2px solid #e2e8f0;
-  //   border-radius: 12px;
-  //   font-size: 16px;
-  //   color: #2d3748;
-  //   background: #f8fafc;
-  //   transition: all 0.3s ease;
-  //   max-width: 309px;
-  //   width: 309;
-  height: 65;
-  border-radius: 8px;
+  width: 100%;
+  height: 56px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 16px;
+  color: #1f2937;
+  background: #f9fafb;
+  transition: all 0.2s ease;
+  padding: 0 16px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  position: relative;
+  
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    transform: translateY(-1px);
+  }
+  
+  &:hover {
+    border-color: #d1d5db;
+    background: #f3f4f6;
+  }
+  
+  &::placeholder {
+    color: #9ca3af;
+    font-weight: 400;
+  }
+  
+  /* Анимация для поля ввода */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 12px;
+    background: linear-gradient(135deg, transparent, rgba(59, 130, 246, 0.05), transparent);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  
+  &:focus::before {
+    opacity: 1;
+  }
 }
 
-.form-input::placeholder {
-  color: #a0aec0;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: #4a90e2;
-  background: white;
-  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
-}
-
-/* Forgot Password Link */
+/* Ссылка "Забыли пароль" */
 .forgot-password {
   text-align: right;
-  margin-top: 8px;
-  margin-bottom: 32px;
+  margin: 16px 0 32px 0;
+  
+  a {
+    color: #3b82f6;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    transition: all 0.2s ease;
+    padding: 4px 8px;
+    border-radius: 6px;
+    position: relative;
+    
+    &::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: #3b82f6;
+      transition: all 0.2s ease;
+      transform: translateX(-50%);
+    }
+    
+    &:hover {
+      color: #2563eb;
+      background: rgba(59, 130, 246, 0.1);
+      text-decoration: none;
+      
+      &::before {
+        width: 100%;
+      }
+    }
+    
+    &:active {
+      transform: scale(0.98);
+    }
+  }
 }
 
-.forgot-password a {
-  color: #4a90e2;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  font-family: Inter;
-  font-weight: 500;
-  font-style: Medium;
-  font-size: 14px;
-  line-height: 20px;
-  letter-spacing: 0%;
-}
-
-.forgot-password a:hover {
-  text-decoration: underline;
-}
-
-/* Login Button */
+/* Кнопка входа */
 .login-button {
   width: 100%;
-  padding: 18px;
-  background: linear-gradient(135deg, #4a90e2, #357abd);
+  height: 56px;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
   color: white;
   border: none;
   border-radius: 16px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(74, 144, 226, 0.3);
+  transition: all 0.2s ease;
+  box-shadow: 
+    0 4px 14px rgba(59, 130, 246, 0.3),
+    0 1px 3px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+  }
+  
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 8px 25px rgba(59, 130, 246, 0.4),
+      0 2px 6px rgba(0, 0, 0, 0.15);
+    
+    &::before {
+      left: 100%;
+    }
+    
+    &::after {
+      opacity: 1;
+    }
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: 
+      0 4px 14px rgba(59, 130, 246, 0.3),
+      0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
 }
 
-.login-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+/* Адаптивность */
+@media (max-width: 480px) {
+  .container {
+    padding: 16px;
+  }
+  
+  .login-container {
+    max-width: 100%;
+    border-radius: 20px;
+  }
+  
+  .form-content {
+    padding: 32px 24px;
+  }
+  
+  .form-title {
+    font-size: 24px;
+  }
+  
+  .security-header {
+    padding: 16px 20px;
+    min-height: 60px;
+  }
 }
 
-.login-button:active {
-  transform: translateY(0);
+/* Анимации */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.login-container {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Стили для ошибок */
+.form-input.error {
+  border-color: #ef4444;
+  background: #fef2f2;
+  
+  &:focus {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+  }
+}
+
+/* Стили для успешного состояния */
+.form-input.success {
+  border-color: #10b981;
+  background: #f0fdf4;
+  
+  &:focus {
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+  }
+}
+
+/* Дополнительные эффекты для улучшения UX */
+.form-input:not(.error):not(.success) {
+  &:focus {
+    border-color: #3b82f6;
+    background: white;
+    box-shadow: 
+      0 0 0 3px rgba(59, 130, 246, 0.1),
+      0 4px 12px rgba(59, 130, 246, 0.1);
+  }
+}
+
+/* Анимация для иконок */
+.security-icon,
+.form-icon {
+  animation: iconFloat 3s ease-in-out infinite;
+}
+
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-3px); }
+}
+
+/* Улучшенные тени для глубины */
+.login-container {
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.1));
+}
+
+/* Градиентные границы для контейнера */
+.login-container::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8, #3b82f6);
+  border-radius: 24px;
+  z-index: -1;
+  opacity: 0.3;
+  filter: blur(10px);
 }

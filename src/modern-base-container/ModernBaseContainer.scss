@@ -1,0 +1,51 @@
+/* Modern Base Container Styles */
+
+.modern-layout {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+  background-image: linear-gradient(rgba(0, 122, 255, 0.3), rgba(0, 122, 255, 0.7)), url('../../public/assets/login_page_bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.modern-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: transparent;
+  z-index: 15;
+  position: relative;
+}
+
+/* Modern Layout Components */
+.modern-w-100 {
+  width: 100%;
+}
+
+.modern-min-vh-100 {
+  min-height: 100vh;
+}
+
+/* Modern Responsive Design */
+@media (max-width: 1200px) {
+  .modern-layout {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .modern-content {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modern-content {
+    padding: 10px;
+  }
+}

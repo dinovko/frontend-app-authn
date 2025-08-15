@@ -1,30 +1,16 @@
-import React from "react";
+import React from 'react';
 
-import { getConfig } from "@edx/frontend-platform";
-import { breakpoints, Image } from "@openedx/paragon";
-import classNames from "classnames";
-import PropTypes from "prop-types";
-import MediaQuery from "react-responsive";
+import { getConfig } from '@edx/frontend-platform';
+import { breakpoints } from '@openedx/paragon';
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import MediaQuery from 'react-responsive';
 
+import { DefaultLargeLayout, DefaultMediumLayout, DefaultSmallLayout } from './components/default-layout';
 import {
-  DefaultLargeLayout,
-  DefaultMediumLayout,
-  DefaultSmallLayout,
-} from "./components/default-layout";
-import {
-  ImageExtraSmallLayout,
-  ImageLargeLayout,
-  ImageMediumLayout,
-  ImageSmallLayout,
-} from "./components/image-layout";
-import {
-  AuthLargeLayout,
-  AuthMediumLayout,
-  AuthSmallLayout,
-} from "./components/welcome-page-layout";
-
-import OrleuLogo from "../../public/assets/ORLEU_Vector.svg";
-import "./index.scss";
+  ImageExtraSmallLayout, ImageLargeLayout, ImageMediumLayout, ImageSmallLayout,
+} from './components/image-layout';
+import { AuthLargeLayout, AuthMediumLayout, AuthSmallLayout } from './components/welcome-page-layout';
 
 const BaseContainer = ({ children, showWelcomeBanner, fullName }) => {
   const enableImageLayout = getConfig().ENABLE_IMAGE_LAYOUT;
@@ -33,44 +19,18 @@ const BaseContainer = ({ children, showWelcomeBanner, fullName }) => {
     return (
       <div className="layout">
         <MediaQuery maxWidth={breakpoints.extraSmall.maxWidth - 1}>
-          {showWelcomeBanner ? (
-            <AuthSmallLayout fullName={fullName} />
-          ) : (
-            <ImageExtraSmallLayout />
-          )}
+          {showWelcomeBanner ? <AuthSmallLayout fullName={fullName} /> : <ImageExtraSmallLayout />}
         </MediaQuery>
-        <MediaQuery
-          minWidth={breakpoints.small.minWidth}
-          maxWidth={breakpoints.small.maxWidth - 1}
-        >
-          {showWelcomeBanner ? (
-            <AuthSmallLayout fullName={fullName} />
-          ) : (
-            <ImageSmallLayout />
-          )}
+        <MediaQuery minWidth={breakpoints.small.minWidth} maxWidth={breakpoints.small.maxWidth - 1}>
+          {showWelcomeBanner ? <AuthSmallLayout fullName={fullName} /> : <ImageSmallLayout />}
         </MediaQuery>
-        <MediaQuery
-          minWidth={breakpoints.medium.minWidth}
-          maxWidth={breakpoints.large.maxWidth - 1}
-        >
-          {showWelcomeBanner ? (
-            <AuthMediumLayout fullName={fullName} />
-          ) : (
-            <ImageMediumLayout />
-          )}
+        <MediaQuery minWidth={breakpoints.medium.minWidth} maxWidth={breakpoints.large.maxWidth - 1}>
+          {showWelcomeBanner ? <AuthMediumLayout fullName={fullName} /> : <ImageMediumLayout />}
         </MediaQuery>
         <MediaQuery minWidth={breakpoints.extraLarge.minWidth}>
-          {showWelcomeBanner ? (
-            <AuthLargeLayout fullName={fullName} />
-          ) : (
-            <ImageLargeLayout />
-          )}
+          {showWelcomeBanner ? <AuthLargeLayout fullName={fullName} /> : <ImageLargeLayout />}
         </MediaQuery>
-        <div
-          className={classNames("content", {
-            "align-items-center mt-0": showWelcomeBanner,
-          })}
-        >
+        <div className={classNames('content', { 'align-items-center mt-0': showWelcomeBanner })}>
           {children}
         </div>
       </div>
@@ -79,51 +39,18 @@ const BaseContainer = ({ children, showWelcomeBanner, fullName }) => {
 
   return (
     <>
-      {/* <div className="col-md-12 extra-large-screen-top-stripe" /> */}
-      <div class="header">
-        <div className="container">
-          <img src={OrleuLogo} alt="Orleu logo" height={20} width={"auto"} />
-        <div class="default-container">
-            <nav class="nav">
-                <ul class="menu">
-                    <li><a href="#" class="language-link">Каз</a></li>
-                    <li><a href="#" class="language-link active">Рус</a></li>
-                    <li><a href="#" class="language-link">Eng</a></li>
-                </ul>
-            </nav>
-        </div>
-        </div>
-      </div>
+      <div className="col-md-12 extra-large-screen-top-stripe" />
       <div className="layout">
         <MediaQuery maxWidth={breakpoints.small.maxWidth - 1}>
-          {showWelcomeBanner ? (
-            <AuthSmallLayout fullName={fullName} />
-          ) : (
-            <DefaultSmallLayout />
-          )}
+          {showWelcomeBanner ? <AuthSmallLayout fullName={fullName} /> : <DefaultSmallLayout />}
         </MediaQuery>
-        <MediaQuery
-          minWidth={breakpoints.medium.minWidth}
-          maxWidth={breakpoints.large.maxWidth - 1}
-        >
-          {showWelcomeBanner ? (
-            <AuthMediumLayout fullName={fullName} />
-          ) : (
-            <DefaultMediumLayout />
-          )}
+        <MediaQuery minWidth={breakpoints.medium.minWidth} maxWidth={breakpoints.large.maxWidth - 1}>
+          {showWelcomeBanner ? <AuthMediumLayout fullName={fullName} /> : <DefaultMediumLayout />}
         </MediaQuery>
         <MediaQuery minWidth={breakpoints.extraLarge.minWidth}>
-          {showWelcomeBanner ? (
-            <AuthLargeLayout fullName={fullName} />
-          ) : (
-            <DefaultLargeLayout />
-          )}
+          {showWelcomeBanner ? <AuthLargeLayout fullName={fullName} /> : <DefaultLargeLayout />}
         </MediaQuery>
-        <div
-          className={classNames("content", {
-            "align-items-center mt-0": showWelcomeBanner,
-          })}
-        >
+        <div className={classNames('content', { 'align-items-center mt-0': showWelcomeBanner })}>
           {children}
         </div>
       </div>

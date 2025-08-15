@@ -1,0 +1,86 @@
+/* Modern Logistration Styles */
+
+.modern-main-content {
+  padding: 20px;
+  text-align: center;
+  border: 1px solid red;
+}
+
+.modern-left-icon {
+  width: 20px;
+  height: 20px;
+  color: #007AFF;
+}
+
+.modern-ml-2 {
+  margin-left: 0.5rem;
+}
+
+.modern-mb-4-5 {
+  margin-bottom: 1.5rem;
+}
+
+/* Вкладки убраны, так как показывается только страница входа */
+
+/* Modern Heading Styles */
+.modern-logistration h3 {
+  color: #15171E;
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+/* Modern Content Container */
+.modern-logistration #main-content {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+/* Modern Institution Login Styles */
+.modern-logistration .institution-login-section {
+  background-color: #F8F9FA;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 30px;
+}
+
+.modern-logistration .institution-login-button {
+  background: linear-gradient(135deg, #007AFF 0%, #0056CC 100%);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  padding: 12px 24px;
+  transition: all 0.3s ease;
+}
+
+.modern-logistration .institution-login-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 122, 255, 0.3);
+}
+
+/* Modern Responsive Design */
+@media (max-width: 768px) {
+  .modern-logistration h3 {
+    font-size: 1.5rem;
+  }
+  
+  .modern-logistration #main-content {
+    padding: 20px 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modern-logistration h3 {
+    font-size: 1.25rem;
+  }
+  
+  .modern-logistration #main-content {
+    padding: 15px 10px;
+  }
+  
+  .modern-logistration .institution-login-section {
+    padding: 20px 15px;
+  }
+}

@@ -1,51 +1,48 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { connect } from "react-redux";
+import { useEffect, useMemo, useState } from 'react';
+import { connect } from 'react-redux';
 
-import { getConfig } from "@edx/frontend-platform";
+import { getConfig } from '@edx/frontend-platform';
+import { sendPageEvent, sendTrackEvent } from '@edx/frontend-platform/analytics';
+import { useIntl } from '@edx/frontend-platform/i18n';
 import {
-  sendPageEvent,
-  sendTrackEvent,
-} from "@edx/frontend-platform/analytics";
-import { injectIntl, useIntl } from "@edx/frontend-platform/i18n";
-import { Form, StatefulButton } from "@openedx/paragon";
-import PropTypes from "prop-types";
-import { Helmet } from "react-helmet";
-import Skeleton from "react-loading-skeleton";
-import { Link } from "react-router-dom";
+  Form, StatefulButton,
+} from '@openedx/paragon';
+import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
+import Skeleton from 'react-loading-skeleton';
+import { Link } from 'react-router-dom';
 
-import AccountActivationMessage from "./AccountActivationMessage";
+import AccountActivationMessage from './AccountActivationMessage';
 import {
   backupLoginFormBegin,
   dismissPasswordResetBanner,
   loginRequest,
-} from "./data/actions";
-import { INVALID_FORM, TPA_AUTHENTICATION_FAILURE } from "./data/constants";
-import LoginFailureMessage from "./LoginFailure";
-import messages from "./messages";
+} from './data/actions';
+import { INVALID_FORM, TPA_AUTHENTICATION_FAILURE } from './data/constants';
+import LoginFailureMessage from './LoginFailure';
+import messages from './messages';
 import {
   FormGroup,
   InstitutionLogistration,
   PasswordField,
   RedirectLogistration,
   ThirdPartyAuthAlert,
-} from "../common-components";
-import { getThirdPartyAuthContext } from "../common-components/data/actions";
-import { thirdPartyAuthContextSelector } from "../common-components/data/selectors";
-import EnterpriseSSO from "../common-components/EnterpriseSSO";
-import ThirdPartyAuth from "../common-components/ThirdPartyAuth";
-import { DEFAULT_STATE, PENDING_STATE, RESET_PAGE } from "../data/constants";
+} from '../common-components';
+import { getThirdPartyAuthContext } from '../common-components/data/actions';
+import { thirdPartyAuthContextSelector } from '../common-components/data/selectors';
+import EnterpriseSSO from '../common-components/EnterpriseSSO';
+import ThirdPartyAuth from '../common-components/ThirdPartyAuth';
+import {
+  DEFAULT_STATE, PENDING_STATE, RESET_PAGE,
+} from '../data/constants';
 import {
   getActivationStatus,
   getAllPossibleQueryParams,
   getTpaHint,
   getTpaProvider,
   updatePathWithQueryParams,
-} from "../data/utils";
-import ResetPasswordSuccess from "../reset-password/ResetPasswordSuccess";
-
-import securityIcon from "../../public/assets/authn_loginpage_security_icon.svg";
-import birdIcon from "../../public/assets/authn_loginpage_bird_icon.svg";
-import "./LoginPage.scss";
+} from '../data/utils';
+import ResetPasswordSuccess from '../reset-password/ResetPasswordSuccess';
 
 const LoginPage = (props) => {
   const {
@@ -75,19 +72,13 @@ const LoginPage = (props) => {
   const activationMsgType = getActivationStatus();
   const queryParams = useMemo(() => getAllPossibleQueryParams(), []);
 
-  const [formFields, setFormFields] = useState({
-    ...backedUpFormData.formFields,
-  });
-  const [errorCode, setErrorCode] = useState({
-    type: "",
-    count: 0,
-    context: {},
-  });
+  const [formFields, setFormFields] = useState({ ...backedUpFormData.formFields });
+  const [errorCode, setErrorCode] = useState({ type: '', count: 0, context: {} });
   const [errors, setErrors] = useState({ ...backedUpFormData.errors });
   const tpaHint = getTpaHint();
 
   useEffect(() => {
-    sendPageEvent("login_and_registration", "login");
+    sendPageEvent('login_and_registration', 'login');
   }, []);
 
   useEffect(() => {
@@ -111,7 +102,7 @@ const LoginPage = (props) => {
 
   useEffect(() => {
     if (loginErrorCode) {
-      setErrorCode((prevState) => ({
+      setErrorCode(prevState => ({
         type: loginErrorCode,
         count: prevState.count + 1,
         context: { ...loginErrorContext },
@@ -135,19 +126,13 @@ const LoginPage = (props) => {
     const { emailOrUsername, password } = payload;
     const fieldErrors = { ...errors };
 
-    if (emailOrUsername === "") {
-      fieldErrors.emailOrUsername = formatMessage(
-        messages["email.validation.message"]
-      );
+    if (emailOrUsername === '') {
+      fieldErrors.emailOrUsername = formatMessage(messages['email.validation.message']);
     } else if (emailOrUsername.length < 2) {
-      fieldErrors.emailOrUsername = formatMessage(
-        messages["username.or.email.format.validation.less.chars.message"]
-      );
+      fieldErrors.emailOrUsername = formatMessage(messages['username.or.email.format.validation.less.chars.message']);
     }
-    if (password === "") {
-      fieldErrors.password = formatMessage(
-        messages["password.validation.message"]
-      );
+    if (password === '') {
+      fieldErrors.password = formatMessage(messages['password.validation.message']);
     }
 
     return { ...fieldErrors };
@@ -163,11 +148,7 @@ const LoginPage = (props) => {
     const validationErrors = validateFormFields(formData);
     if (validationErrors.emailOrUsername || validationErrors.password) {
       setErrors({ ...validationErrors });
-      setErrorCode((prevState) => ({
-        type: INVALID_FORM,
-        count: prevState.count + 1,
-        context: {},
-      }));
+      setErrorCode(prevState => ({ type: INVALID_FORM, count: prevState.count + 1, context: {} }));
       return;
     }
 
@@ -182,24 +163,18 @@ const LoginPage = (props) => {
 
   const handleOnChange = (event) => {
     const { name, value } = event.target;
-    setFormFields((prevState) => ({ ...prevState, [name]: value }));
+    setFormFields(prevState => ({ ...prevState, [name]: value }));
   };
 
   const handleOnFocus = (event) => {
     const { name } = event.target;
-    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
+    setErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
   };
   const trackForgotPasswordLinkClick = () => {
-    sendTrackEvent("edx.bi.password-reset_form.toggled", {
-      category: "user-engagement",
-    });
+    sendTrackEvent('edx.bi.password-reset_form.toggled', { category: 'user-engagement' });
   };
 
-  const { provider, skipHintedLogin } = getTpaProvider(
-    tpaHint,
-    providers,
-    secondaryProviders
-  );
+  const { provider, skipHintedLogin } = getTpaProvider(tpaHint, providers, secondaryProviders);
 
   if (tpaHint) {
     if (thirdPartyAuthApiStatus === PENDING_STATE) {
@@ -220,22 +195,21 @@ const LoginPage = (props) => {
     return (
       <InstitutionLogistration
         secondaryProviders={secondaryProviders}
-        headingTitle={formatMessage(messages["institution.login.page.title"])}
+        headingTitle={formatMessage(messages['institution.login.page.title'])}
       />
     );
   }
   return (
     <>
       <Helmet>
-        {/* <title>{formatMessage(messages['login.page.title'], { siteName: getConfig().SITE_NAME })}</title> */}
-        <title>Вход</title>
+        <title>{formatMessage(messages['login.page.title'], { siteName: getConfig().SITE_NAME })}</title>
       </Helmet>
       <RedirectLogistration
         success={loginResult.success}
         redirectUrl={loginResult.redirectUrl}
         finishAuthUrl={finishAuthUrl}
       />
-      <div className="container">
+      <div className="mw-xs mt-3 mb-2">
         <LoginFailureMessage
           errorCode={errorCode.type}
           errorCount={errorCode.count}
@@ -245,116 +219,54 @@ const LoginPage = (props) => {
           currentProvider={currentProvider}
           platformName={platformName}
         />
-        <AccountActivationMessage messageType={activationMsgType} />
+        <AccountActivationMessage
+          messageType={activationMsgType}
+        />
         {showResetPasswordSuccessBanner && <ResetPasswordSuccess />}
-        <div className="full-bg"></div>
-        <div class="login-container">
-          <div class="security-header">
-            <div class="security-icon">
-              <img src={securityIcon} width={"11px"} height={"auto"}/>
-            </div>
-            <span>Пожалуйста, подтвердите свою личность для безопасности.</span>
-          </div>
-
-          <div class="form-content">
-            <div class="form-header">
-              <div class="form-icon">
-                <img src={birdIcon} height={"18px"} width={"auto"} />
-              </div>
-              <div class="form-title">Вход в систему</div>
-            </div>
-            <div id="loginForm">
-              <Form id="sign-in-form" name="sign-in-form">
-                <div class="form-input-text">Логин</div>
-                <FormGroup
-                  name="emailOrUsername"
-                  value={formFields.emailOrUsername}
-                  autoComplete="on"
-                  handleChange={handleOnChange}
-                  handleFocus={handleOnFocus}
-                  errorMessage={errors.emailOrUsername}
-                  className="form-input"
-                  floatingLabel={
-                    // formatMessage(
-                    "Введите логин"
-                    // messages["login.user.identity.label"]
-                  // )
-                }
-                />
-                {/* <div class="form-group">
-                    <label class="form-label" for="login">Логин</label>
-                    <input 
-                        type="text" 
-                        id="login" 
-                        name="login" 
-                        class="form-input" 
-                        placeholder="Введите логин"
-                        required
-                    />
-                </div> */}
-                <div class="form-input-text">Пароль</div>
-                <PasswordField
-                  name="password"
-                  value={formFields.password}
-                  autoComplete="off"
-                  showScreenReaderText={false}
-                  showRequirements={false}
-                  handleChange={handleOnChange}
-                  handleFocus={handleOnFocus}
-                  errorMessage={errors.password}
-                  className="form-input"
-                  floatingLabel={
-                    "Введите пароль"
-                  //   formatMessage(
-                  //   messages["login.password.label"]
-                  // )
-                }
-                />
-                {/* <div class="form-group">
-                    <label class="form-label" for="password">Пароль</label>
-                    <input 
-                        type="password" 
-                        id="password" 
-                        name="password" 
-                        class="form-input" 
-                        placeholder="Введите пароль"
-                        required
-                    />
-                </div> */}
-                <div class="forgot-password">
-                  <Link
-                    id="forgot-password"
-                    name="forgot-password"
-                    // className="btn btn-link font-weight-500 text-body"
-                    to={updatePathWithQueryParams(RESET_PAGE)}
-                    onClick={trackForgotPasswordLinkClick}
-                  >
-                    {/* {formatMessage(messages["forgot.password"])} */}
-                    Забыли пароль?
-                  </Link>
-                </div>
-                <StatefulButton
-                  name="sign-in"
-                  id="sign-in"
-                  type="submit"
-                  variant="brand"
-                  // className="login-button-width"
-                  className="login-button"
-                  state={submitState}
-                  labels={{
-                    // default: formatMessage(messages["sign.in.button"]),
-                    default: "Войти",
-                    pending: "",
-                  }}
-                  onClick={handleSubmit}
-                  onMouseDown={(event) => event.preventDefault()}
-                />
-                {/* <div class="forgot-password">
-                    <a href="#" id="forgotPasswordLink">Забыли пароль?</a>
-                </div> */}
-
-                {/* <button type="submit" class="login-button">Войти</button> */}
-                {/* 
+        <Form id="sign-in-form" name="sign-in-form">
+          <FormGroup
+            name="emailOrUsername"
+            value={formFields.emailOrUsername}
+            autoComplete="on"
+            handleChange={handleOnChange}
+            handleFocus={handleOnFocus}
+            errorMessage={errors.emailOrUsername}
+            floatingLabel={formatMessage(messages['login.user.identity.label'])}
+          />
+          <PasswordField
+            name="password"
+            value={formFields.password}
+            autoComplete="off"
+            showScreenReaderText={false}
+            showRequirements={false}
+            handleChange={handleOnChange}
+            handleFocus={handleOnFocus}
+            errorMessage={errors.password}
+            floatingLabel={formatMessage(messages['login.password.label'])}
+          />
+          <StatefulButton
+            name="sign-in"
+            id="sign-in"
+            type="submit"
+            variant="brand"
+            className="login-button-width"
+            state={submitState}
+            labels={{
+              default: formatMessage(messages['sign.in.button']),
+              pending: '',
+            }}
+            onClick={handleSubmit}
+            onMouseDown={(event) => event.preventDefault()}
+          />
+          <Link
+            id="forgot-password"
+            name="forgot-password"
+            className="btn btn-link font-weight-500 text-body"
+            to={updatePathWithQueryParams(RESET_PAGE)}
+            onClick={trackForgotPasswordLinkClick}
+          >
+            {formatMessage(messages['forgot.password'])}
+          </Link>
           <ThirdPartyAuth
             currentProvider={currentProvider}
             providers={providers}
@@ -362,17 +274,14 @@ const LoginPage = (props) => {
             handleInstitutionLogin={handleInstitutionLogin}
             thirdPartyAuthApiStatus={thirdPartyAuthApiStatus}
             isLoginPage
-          /> */}
-              </Form>
-            </div>
-          </div>
-        </div>
+          />
+        </Form>
       </div>
     </>
   );
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   const loginPageState = state.login;
   return {
     backedUpFormData: loginPageState.loginFormData,
@@ -380,8 +289,7 @@ const mapStateToProps = (state) => {
     loginErrorContext: loginPageState.loginErrorContext,
     loginResult: loginPageState.loginResult,
     shouldBackupState: loginPageState.shouldBackupState,
-    showResetPasswordSuccessBanner:
-      loginPageState.showResetPasswordSuccessBanner,
+    showResetPasswordSuccessBanner: loginPageState.showResetPasswordSuccessBanner,
     submitState: loginPageState.submitState,
     thirdPartyAuthContext: thirdPartyAuthContextSelector(state),
     thirdPartyAuthApiStatus: state.commonComponents.thirdPartyAuthApiStatus,
@@ -427,12 +335,10 @@ LoginPage.propTypes = {
 LoginPage.defaultProps = {
   backedUpFormData: {
     formFields: {
-      emailOrUsername: "",
-      password: "",
+      emailOrUsername: '', password: '',
     },
     errors: {
-      emailOrUsername: "",
-      password: "",
+      emailOrUsername: '', password: '',
     },
   },
   loginErrorCode: null,
@@ -451,9 +357,12 @@ LoginPage.defaultProps = {
   },
 };
 
-export default connect(mapStateToProps, {
-  backupFormState: backupLoginFormBegin,
-  dismissPasswordResetBanner,
-  loginRequest,
-  getTPADataFromBackend: getThirdPartyAuthContext,
-})(injectIntl(LoginPage));
+export default connect(
+  mapStateToProps,
+  {
+    backupFormState: backupLoginFormBegin,
+    dismissPasswordResetBanner,
+    loginRequest,
+    getTPADataFromBackend: getThirdPartyAuthContext,
+  },
+)(LoginPage);

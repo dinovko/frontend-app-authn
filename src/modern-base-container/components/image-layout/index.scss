@@ -1,0 +1,10 @@
+/* Modern Image Layout Styles - Упрощены для фонового изображения */
+
+.modern-banner__image {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* Все остальные стили убраны, так как теперь используется единое фоновое изображение */
